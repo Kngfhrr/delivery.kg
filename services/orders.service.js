@@ -5,7 +5,6 @@ export default class OrderService {
     allOrders = async () => {
         try {
             const res = await base.getJSON(`/deliveries`)
-            console.log('RES', res)
             if (res && res.errors) {
                 return {error: res.errors}
             }

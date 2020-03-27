@@ -5,6 +5,7 @@ import Input from '../components/Input'
 
 import moment from 'moment'
 import OrderService from '../services/orders.service'
+import Button from "../components/Button";
 const orders = new OrderService()
 
 const Wrapper = styled.View`
@@ -42,39 +43,17 @@ const InitialErrors = {
 }
 
 export default function CreateOrder(props) {
-     console.log('props', props.navigationOptions)
     const [fields, setFields] = useState(InitialState)
-    const [date, setDate] = useState('')
-    const [done, setDone] = useState(false)
-    const [deleting, setDeleting] = useState(false)
     const [validated, setValidate] = useState(false)
     const [errors, setError] = useState(InitialErrors)
     const [loading, setLoading] = useState(false)
-
-    const id = 1
-    const add = moment(date)
-    const start = moment(fields.startsAt).diff(moment(fields.startsAt).startOf('day'), 'seconds')
-    const startEvent = moment(add).add(start, 'seconds').toDate()
-
-    const end = moment(fields.endsAt).diff(moment(fields.endsAt).startOf('day'), 'seconds')
-    const endEvent = moment(add).add(end, 'seconds').toDate()
-
-    const durationMeeting = moment(startEvent).diff(moment(fields.startsAt).startOf('day'), 'minutes')
-        === moment(endEvent).diff(moment(fields.startsAt).startOf('day'), 'minutes')
-
     useEffect(() => {
         const validated = stateValidator()
-        validated ? setValidate(true) : setValidate(false)
-    }, [fields, date]);
-
-
-    const getOneEvent = async () => {
-        // const res = await meeting.oneMeeting(id)
-        setFields(res)
-        setDate(moment(res && res.startsAt).format('MM/DD/YYYY'))
-    }
+         setValidate(validated)
+    }, [fields]);
 
     const handleSave = async () => {
+        stateValidator()
         const data = {
             name: fields.name,
             from: fields.from,
@@ -84,16 +63,15 @@ export default function CreateOrder(props) {
         }
         try {
             setLoading(true)
-            let res
-            if(res && !res.id){
-                setValidate(false)
-                setError({errors, name: 'Something wrong...'})
-                return
-            } else {
-                props.navigation.navigate('HomeScreen')
-            }}
+            const res = await orders.createOrder(data)
+            if(res && res.id){
+                props.navigation.push('Root')
+            }
+            }
         catch (e) { console.log('e', e) }
-        finally { setLoading(false) }
+        finally {
+            setLoading(false)
+        }
     }
 
     const onValidate = (field, valid, msg) => {
@@ -115,11 +93,6 @@ export default function CreateOrder(props) {
         return !state.some(val => !val)
     }
 
-    const deleteMeeting = async () => {
-        await meeting.deleteMeeting(id)
-    }
-
-
     return (
         <Wrapper>
                 <KeyboardAvoidingView
@@ -137,7 +110,7 @@ export default function CreateOrder(props) {
                                     placeholder={''}
                                     value={fields.name}
                                     maxLength={40}
-                                    onBlur={() => onValidate('title', fields.name.length, 'Обязательное поле')}
+                                    onBlur={() => onValidate('name', fields.name.length, 'Обязательное поле')}
                                     onChange={e => {
                                         setFields({ ...fields, name: e.trimLeft() })
                                         setError({ ...errors, name: '' })
@@ -149,6 +122,7 @@ export default function CreateOrder(props) {
                                     style={{ marginBottom: 15 }}
                                     label={'Откуда забрать'}
                                     value={fields.from}
+                                    onBlur={() => onValidate('from', fields.from.length, 'Обязательное поле')}
                                     onChange={e => {
                                         setFields({ ...fields, from: e.trimLeft() })
                                         setError({ ...errors, from: '' })
@@ -160,6 +134,7 @@ export default function CreateOrder(props) {
                                     style={{ marginBottom: 15 }}
                                     label={'Куда доставить'}
                                     value={fields.where}
+                                    onBlur={() => onValidate('where', fields.where.length, 'Обязательное поле')}
                                     onChange={e => {
                                         setFields({ ...fields, where: e.trimLeft() })
                                         setError({ ...errors, where: '' })
@@ -171,6 +146,7 @@ export default function CreateOrder(props) {
                                     style={{ marginBottom: 15 }}
                                     label={'Номер телефона'}
                                     value={fields.phone}
+                                    onBlur={() => onValidate('phone', fields.phone.length, 'Обязательное поле')}
                                     onChange={e => {
                                         setFields({ ...fields, phone: e.trimLeft() })
                                         setError({ ...errors, phone: '' })
@@ -181,12 +157,14 @@ export default function CreateOrder(props) {
                                     maxLength={40}
                                     style={{ marginBottom: 15 }}
                                     label={'Комментарий'}
-                                    value={fields.phone}
+                                    value={fields.notes}
+                                    onBlur={() => onValidate('notes', fields.notes.length, 'Обязательное поле')}
                                     onChange={e => {
                                         setFields({ ...fields, notes: e.trimLeft() })
                                         setError({ ...errors, notes: '' })
                                     }}
                                 />
+                                <Button loading={loading} disabled={!validated} style={{marginTop: 15, marginBottom: 40}} label={'Создать'} onPress={handleSave}/>
                             </Content>
                         </ScrollView>
                 </KeyboardAvoidingView>

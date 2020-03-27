@@ -3,20 +3,17 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {YellowBox} from "react-native"; // remove
+YellowBox.ignoreWarnings(['Warning: ...']); // remove
+console.disableYellowBox = true; // disabled warnings in debug version app
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import useLinking from './navigation/useLinking';
-import CreateOrder from "./screens/CreateOrder";
+import Router from "./navigation/Router";
 
 const Stack = createStackNavigator();
 
 export default function App(props) {
     const [isLoadingComplete, setLoadingComplete] = React.useState(false);
-    const [initialNavigationState, setInitialNavigationState] = React.useState();
-    const containerRef = React.useRef();
-    const { getInitialState } = useLinking(containerRef);
 
     // Load any resources or data that we need prior to rendering the app
     React.useEffect(() => {
@@ -49,13 +46,8 @@ export default function App(props) {
     } else {
         return (
             <View style={styles.container}>
-                {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-                    <Stack.Navigator>
-                        <Stack.Screen name="Root" component={BottomTabNavigator} />
-                        <Stack.Screen name="CreateOrder" component={CreateOrder} />
-                    </Stack.Navigator>
-                </NavigationContainer>
+            <StatusBar barStyle="dark-content" />
+                <Router />
             </View>
         );
     }

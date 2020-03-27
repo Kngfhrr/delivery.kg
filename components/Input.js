@@ -17,7 +17,8 @@ const StyledInput = styled(TextInput)`
   margin: 0;
 `
 const ErrorText = styled.Text`
-
+  font-size: 14;
+  color: #FF6F3E;
 `
 export default function Input(props) {
     const [secureText, setSecureText] = useState(false)
