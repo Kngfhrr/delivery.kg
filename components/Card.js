@@ -51,8 +51,11 @@ const Date = styled.Text``;
 const Card = (props) => {
   moment.locale("de");
   const name = "Nikolay";
+  const onPress = () => {
+    props.onPress && props.onPress()
+  }
   return (
-    <Tap onPress={props.onPress}>
+    <Tap onPress={onPress}>
       <View style={styles.container}>
         <View style={{ alignItems: "center", justifyContent: "space-between" }}>
           <View>

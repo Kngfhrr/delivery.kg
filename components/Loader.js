@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { ActivityIndicator } from 'react-native'
+import Colors from "../constants/Colors";
 
 const Indicator = styled.View`
   flex: 1;
@@ -11,7 +12,7 @@ const Indicator = styled.View`
 export default function Loading() {
     return (
         <Indicator>
-            <ActivityIndicator size="large" color="#5C8DE8" />
+            <ActivityIndicator size="large" color={Colors.tintColor} />
         </Indicator>
     )
 }

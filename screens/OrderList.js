@@ -17,20 +17,15 @@ import Tap from "../components/Tap";
 import { useState } from "react";
 import OrderService from "../services/orders.service";
 import TopButton from "../components/TopButton";
+import MapScreen from "./MapScreen";
+import Loader from "../components/Loader";
 const order = new OrderService();
 
 export default function OrderList(props) {
   const [orders, setOrders] = useState(null);
   const [touched, setTouched] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [fadeAnim] = useState(new Animated.Value(!touched ? 20 : -99));
-
-  React.useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: !touched ? -99 : 20,
-      duration: 500,
-    }).start();
-  }, [touched]);
+  const [active, setActive] = useState(false);
 
   React.useEffect(() => {
     getAllOrders();
@@ -53,52 +48,42 @@ export default function OrderList(props) {
 
   return (
     <View style={styles.container}>
-      <TopButton />
-      <View
-        style={{
-          width: 35,
-          height: 35,
-          backgroundColor: "#fff",
-          borderRadius: 6,
-          borderWidth: 0.1,
-          alignItems: "center",
-          justifyContent: "center",
-          alignSelf: "flex-end",
-          marginRight: 16,
-            elevation: 3,
-        }}
-      >
-        <Ionicons name={"md-funnel"} size={30} color={"#000"} />
-      </View>
-      <Tap onPress={() => props.navigation.navigate("CreateOrder")}>
-        <Animated.View style={{ ...styles.addButton, right: fadeAnim }}>
-          <Ionicons name={"md-add"} size={30} color={"#fff"} />
-        </Animated.View>
-      </Tap>
-      <FlatList
-        onScrollBeginDrag={() => setTouched(false)}
-        onScrollEndDrag={() => setTouched(true)}
-        style={{ alignSelf: "center", flex: 1 }}
-        showsVerticalScrollIndicator={false}
-        data={orders && orders.length > 0 && orders}
-        renderItem={({ item: i, idx }) => {
-          return (
-            <View key={idx}>
-              <Card
-                onPress={() =>
-                  props.navigation.push("OrderDetails")
-                }
-                style={{ marginBottom: 14, alignSelf: "center" }}
-                name={i.name}
-                date={i.created_at}
-                from={i.from}
-                where={i.where}
-                notes={i.notes}
-              />
+      <TopButton active={active} setActive={setActive} />
+      {active ? (
+        !loading ? (
+          <View style={{ flex: 1 }}>
+            <View style={styles.filter}>
+              <Ionicons name={"md-funnel"} size={30} color={"#000"} />
             </View>
-          );
-        }}
-      />
+            <FlatList
+              onScrollBeginDrag={() => setTouched(false)}
+              onScrollEndDrag={() => setTouched(true)}
+              style={{ alignSelf: "center", flex: 1 }}
+              showsVerticalScrollIndicator={false}
+              data={orders && orders.length > 0 && orders}
+              renderItem={({ item: i, idx }) => {
+                return (
+                  <View key={idx}>
+                    <Card
+                      onPress={() => props.navigation.navigate('OrderDetails')}
+                      style={{ marginBottom: 14, alignSelf: "center" }}
+                      name={i.name}
+                      date={i.created_at}
+                      from={i.from}
+                      where={i.where}
+                      notes={i.notes}
+                    />
+                  </View>
+                );
+              }}
+            />
+          </View>
+        ) : (
+          <Loader />
+        )
+      ) : (
+        <MapScreen />
+      )}
     </View>
   );
 }
@@ -120,9 +105,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
-    zIndex: 2,
-    bottom: 70,
+    position: "relative",
+    zIndex: 9999,
+    bottom: -500,
     shadowColor: "#000000",
     elevation: 5,
     shadowOpacity: 0.8,
@@ -131,5 +116,17 @@ const styles = StyleSheet.create({
       height: 1,
       width: 0,
     },
+  },
+  filter: {
+    width: 35,
+    height: 35,
+    backgroundColor: "#fff",
+    borderRadius: 6,
+    borderWidth: 0.1,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "flex-end",
+    marginRight: 16,
+    elevation: 3,
   },
 });

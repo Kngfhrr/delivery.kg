@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { DEVICE_WIDTH } from "../constants/Layout";
 import Colors from "../constants/Colors";
-
+import { createStackNavigator } from '@react-navigation/stack';
 import Button from "../components/Button";
 import { ScrollView, Text } from "react-native";
 import moment from "moment";
 import Loading from "../components/Loader";
-import OrderService from "../services/orders.service";
-const order = new OrderService();
+import OrderService from '../services/orders.service'
+const order = new OrderService()
+const StackNavigator = createStackNavigator()
 
 const Wrapper = styled.View`
   display: flex;
@@ -43,6 +44,10 @@ const Agenda = styled.Text`
   color: #000000;
 `;
 export default class OrderDetails extends React.Component {
+
+    static navigationOptions = {
+        header: { visible:false }
+    }
 
   state = {
     orders: null,
@@ -86,3 +91,5 @@ export default class OrderDetails extends React.Component {
     );
   }
 }
+
+// const OrderDetailsStack = StackNavigator({screen: 'OrderDetails', navigationOptions: {}})
