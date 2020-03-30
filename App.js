@@ -8,7 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
-import CreateOrder from "./screens/CreateOrder";
+import CreateOrder from "./screens/CreateOrder/CreateOrder";
 import OrderDetails from "./screens/OrderDetails";
 
 const Stack = createStackNavigator();

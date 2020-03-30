@@ -9,15 +9,14 @@ const Container = styled.View`
   
 `
 
-
 const StyledInput = styled(TextInput)`
-  width: ${DEVICE_WIDTH - 32};
+  width: ${DEVICE_WIDTH - 32}px;
   justify-content: flex-start;
   display: flex;
   margin: 0;
 `
 const ErrorText = styled.Text`
-  font-size: 14;
+  font-size: 14px;
   color: #FF6F3E;
 `
 export default function Input(props) {

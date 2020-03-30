@@ -10,52 +10,51 @@ import Dash from "react-native-dash";
 
 const Line = styled.View`
   height: 95%;
-  width: 1.5;
+  width: 1.5px;
   background-color: #dbdddc;
   align-self: center;
-  margin-left: 15;
-  margin-right: 15;
+  margin-left: 15px;
+  margin-right: 15px;
 `;
 
 const AddressText = styled.Text`
-  margin-left: 10;
+  margin-left: 10px;
   width: 100%;
 `;
 
 const Title = styled.Text`
-  font-size: 18;
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 15;
-  margin-top: 10;
+  margin-bottom: 15px;
+  margin-top: 10px;
 `;
 const Photo = styled.View`
-  width: 50;
-  height: 50;
-  border-radius: 50;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
   background: #e2e0ee;
-  margin-top: 10;
+  margin-top: 10px;
   align-items: center;
   justify-content: center;
 `;
 const Name = styled.Text`
   color: #7869a8;
-  margin-top: 10;
-  font-size: 14;
-  max-width: 60;
+  margin-top: 10px;
+  font-size: 14px;
+  max-width: 60px;
   font-weight: bold;
 `;
 const Cash = styled.Text`
-  font-size: 20;
+  font-size: 20px;
 `;
 const Date = styled.Text``;
 const Card = (props) => {
-  moment.locale("de");
   const name = "Nikolay";
   const onPress = () => {
     props.onPress && props.onPress()
   }
   return (
-    <Tap onPress={onPress}>
+    <Tap onPress={onPress} key={props.idx}>
       <View style={styles.container}>
         <View style={{ alignItems: "center", justifyContent: "space-between" }}>
           <View>

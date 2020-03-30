@@ -53,7 +53,7 @@ export default function OrderList(props) {
         !loading ? (
           <View style={{ flex: 1 }}>
             <View style={styles.filter}>
-              <Ionicons name={"md-funnel"} size={30} color={"#000"} />
+              <Ionicons name={"md-options"} size={30} color={"#767676"} />
             </View>
             <FlatList
               onScrollBeginDrag={() => setTouched(false)}
@@ -61,9 +61,9 @@ export default function OrderList(props) {
               style={{ alignSelf: "center", flex: 1 }}
               showsVerticalScrollIndicator={false}
               data={orders && orders.length > 0 && orders}
+              keyExtractor={(item, i) => item.key }
               renderItem={({ item: i, idx }) => {
                 return (
-                  <View key={idx}>
                     <Card
                       onPress={() => props.navigation.navigate('OrderDetails')}
                       style={{ marginBottom: 14, alignSelf: "center" }}
@@ -72,8 +72,8 @@ export default function OrderList(props) {
                       from={i.from}
                       where={i.where}
                       notes={i.notes}
+                      idx={idx}
                     />
-                  </View>
                 );
               }}
             />

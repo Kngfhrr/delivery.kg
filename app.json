@@ -29,7 +29,12 @@
     },
     "android": {
       "package": "com.delivery.bishkek",
-      "versionCode": 1
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAi26HnlWQfj2CDuRk3g72HOLEbjLzdoKE"
+        }
+      }
     }
   }
 }
