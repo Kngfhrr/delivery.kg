@@ -21,11 +21,11 @@ const initialPlace = {
 }
 
 export default function SelectAddress(props) {
-    const [currentPlace, setCurrent] = useState(null)
-    console.log('currentPlace', currentPlace)
-    const [local, setLocation] = useState(null)
+    const [currentPlace, setCurrent] = useState(initialPlace)
+    const [local, setLocation] = useState(initialPlace)
     const [padding, setPadding] = useState(1)
     const mapRef = useRef(null)
+    const markerRef = useRef(null)
 
     useEffect(() => {
         getLocationAsync()
@@ -43,12 +43,13 @@ export default function SelectAddress(props) {
         setLocation(location)
     }
 
-    const getCurrentAddress = async (data) => {
+    const getCurrentAddress = async (data, markerRef) => {
         const lat = data.coordinate.latitude
         const lon = data.coordinate.longitude
         try {
             const res = await Map.getAddress(lat, lon)
             setCurrent(res)
+            markerRef.current.showCallout()
         } catch (e) {
             console.log('E', e)
         } finally {
@@ -61,7 +62,7 @@ export default function SelectAddress(props) {
                 ref={mapRef}
                 provider={PROVIDER_GOOGLE}
                 style={{ ...styles.mapStyle, marginBottom: padding }}
-                region={local && local.coords ? local.coords : initialPlace}
+                region={local}
                 showsUserLocation={true}
                 customMapStyle={MapStyle}
                 showsMyLocationButton={true}
@@ -81,11 +82,11 @@ export default function SelectAddress(props) {
                 }}
             >
                 <Marker
+                    ref={markerRef}
                     draggable
                     description={currentPlace && currentPlace.display_name}
-                    {...console.log('CONSOLE', currentPlace && currentPlace.display_name)}
                     title={'Вы здесь'}
-                    onDragEnd={(e) => getCurrentAddress(e.nativeEvent)}
+                    onDragEnd={(e) => getCurrentAddress(e.nativeEvent, markerRef)}
                     coordinate={
                         local && local.coords ? local.coords : initialPlace
                     }

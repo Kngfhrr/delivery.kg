@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { DEVICE_WIDTH } from '../constants/Layout'
 import Colors from '../constants/Colors'
-import { createStackNavigator } from '@react-navigation/stack'
-import Button from '../components/Button'
-import {ScrollView, Text, TextInput} from 'react-native'
+import {ScrollView } from 'react-native'
 import moment from 'moment'
 import Loading from '../components/Loader'
 import OrderService from '../services/orders.service'
 const order = new OrderService()
-const StackNavigator = createStackNavigator()
-import { GoogleAutoComplete } from 'react-native-google-autocomplete';
 
 const Wrapper = styled.View`
     display: flex;
@@ -30,7 +26,7 @@ const Content = styled.View`
 `
 export const HeadLine = styled.Text`
     font-size: 14px;
-    line-height: 16;
+    line-height: 16px;
     margin-top: 45px;
     margin-bottom: 15px;
     color: ${Colors.tintColor};
@@ -73,32 +69,6 @@ export default class OrderDetails extends React.Component {
                             <HeadLine>{`Дата создания`}</HeadLine>
                             <Answer>{orders && orders.created_at}</Answer>
                             <HeadLine>{`Откуда`}</HeadLine>
-                            <GoogleAutoComplete apiKey="AIzaSyAi26HnlWQfj2CDuRk3g72HOLEbjLzdoKE" debounce={300}>
-                                {({ inputValue, handleTextChange, locationResults, fetchDetails }) => (
-                                    <React.Fragment>
-                                        <TextInput
-                                            style={{
-                                                height: 40,
-                                                width: 300,
-                                                borderWidth: 1,
-                                                paddingHorizontal: 16,
-                                            }}
-                                            value={inputValue}
-                                            onChangeText={handleTextChange}
-                                            placeholder="Location..."
-                                        />
-                                        <ScrollView style={{ maxHeight: 100 }}>
-                                            {locationResults.map((el, i) => (
-                                                <LocationItem
-                                                    {...el}
-                                                    fetchDetails={fetchDetails}
-                                                    key={String(i)}
-                                                />
-                                            ))}
-                                        </ScrollView>
-                                    </React.Fragment>
-                                )}
-                            </GoogleAutoComplete>
                             <Answer>{orders && orders.from}</Answer>
                             <HeadLine>{`Куда`}</HeadLine>
                             <Answer>{orders && orders.where}</Answer>
@@ -115,4 +85,3 @@ export default class OrderDetails extends React.Component {
     }
 }
 
-// const OrderDetailsStack = StackNavigator({screen: 'OrderDetails', navigationOptions: {}})
