@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { StyleSheet, Text, View, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import MapView from 'react-native-maps'
+import MapView, {Callout, CalloutSubview} from 'react-native-maps'
 import { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import OverlayComponent from 'react-native-maps'
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../constants/Layout'
@@ -12,6 +12,8 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import Colors from '../constants/Colors'
 import {useEffect} from "react";
+import Card from "../components/Card";
+import BoxIcon from "../components/BoxIcon";
 
 export default function MapScreen(props) {
     const initialPlace = {
@@ -62,27 +64,12 @@ export default function MapScreen(props) {
                 <Marker
                     onEndDrag={onChangeMarker}
                     coordinate={initialPlace}
-                    title={'gdffdsffffffffffffffffgdf'}
-                    description={'gdf'}
                 >
-                    <View
-                        style={{
-                            height: 40,
-                            width: 40,
-                            backgroundColor: Colors.tintColor,
-                            borderRadius: 5,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Ionicons name={'md-cube'} size={30} color={'#fff'} />
-                    </View>
-                    <Ionicons
-                        name={'md-disc'}
-                        size={17}
-                        color={Colors.tintColor}
-                        style={{ marginLeft: 13 }}
-                    />
+                   <BoxIcon />
+                        <Callout tooltip={true}>
+                           <Card />
+                        </Callout>
+
                 </Marker>
             </MapView>
         </View>
